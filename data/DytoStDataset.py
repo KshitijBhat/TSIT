@@ -15,16 +15,16 @@ npyf = 15
 ########################
 
 class DytoStKITTIDataset(torch.utils.data.Dataset):
-    def __init__(self, opt):
+    def __init__(self):
         super(DytoStKITTIDataset, self).__init__()
-        opt.dataroot = "/home/prashant/scratch/data/kitti/range_image/scan"
+        dataroot = "/home/prashant/scratch/data/kitti/range_image/scan"
 
-        # opt.dataroot = "../prash/data"
-        self.dir_dynamic = os.path.join(opt.dataroot, 'dynamic')
-        self.dir_static = os.path.join(opt.dataroot, 'static')
+        # dataroot = "../prash/data"
+        self.dir_dynamic = os.path.join(dataroot, 'dynamic')
+        self.dir_static = os.path.join(dataroot, 'static')
         
         # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-        self.opt = opt
+        
         
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,5:45] for i in range(2)])))
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,:,::4] for i in range(2)])))
@@ -34,15 +34,15 @@ class DytoStKITTIDataset(torch.utils.data.Dataset):
         # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,:1,:,::4] for i in range(2)]))
         
 
-        # self.A = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
-        # self.B = torch.from_numpy(np.random.random((4541, 3, 64, 128))).float()
+        self.A = torch.from_numpy(np.random.random((5, 3, 256, 256))).float()
+        self.B = torch.from_numpy(np.random.random((5, 3, 256, 256))).float()
         # self.C = torch.from_numpy(np.random.random((4541, 1, 64, 128))).float()
 
         
         #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
 
         ###################################################### SKIP data code
-
+        """
         st1 = []
         dy1 = []
 
@@ -80,7 +80,7 @@ class DytoStKITTIDataset(torch.utils.data.Dataset):
          
         self.A = torch.from_numpy(dy1)
         self.B = torch.from_numpy(st1)
-
+        """
         
 
 
@@ -120,17 +120,17 @@ def __print_size_warning(ow, oh, w, h):
 
 
 class TestDytoStKITTIDataset(torch.utils.data.Dataset):
-    def __init__(self, opt):
+    def __init__(self):
         super(TestDytoStKITTIDataset, self).__init__()
-        opt.dataroot = "/home/prashant/scratch/data/kitti/range_image/scan"
+        dataroot = "/home/prashant/scratch/data/kitti/range_image/scan"
         NUM_DATA = 9 # number of npy files in train data
 
-        # opt.dataroot = "../prash/data"
-        self.dir_dynamic = os.path.join(opt.dataroot, 'dynamic')
-        self.dir_static = os.path.join(opt.dataroot, 'static')
+        # dataroot = "../prash/data"
+        self.dir_dynamic = os.path.join(dataroot, 'dynamic')
+        self.dir_static = os.path.join(dataroot, 'static')
         
         # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-        self.opt = opt
+
         
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,5:45] for i in range(2)])))
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,:,::4] for i in range(2)])))
@@ -199,13 +199,13 @@ class TestDytoStKITTIDataset(torch.utils.data.Dataset):
 
 
 class DytoStCARLADataset(torch.utils.data.Dataset):
-    def __init__(self, opt):
+    def __init__(self):
         super(DytoStCARLADataset, self).__init__()
-        opt.dataroot = "/home/prashant/scratch/data/DSLR/lidar/"
+        dataroot = "/home/prashant/scratch/data/DSLR/lidar/"
 
         
         # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-        self.opt = opt
+
         
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,5:45] for i in range(2)])))
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,:,::4] for i in range(2)])))
@@ -233,12 +233,12 @@ class DytoStCARLADataset(torch.utils.data.Dataset):
 
         for i in npy:
             # (64 128)
-            dy = self.from_polar_np(np.load(opt.dataroot+f"/d{i}.npy")[:,:,:,::4])
-            st = self.from_polar_np(np.load(opt.dataroot+f"/s{i}.npy")[:,:,:,::4])
+            dy = self.from_polar_np(np.load(dataroot+f"/d{i}.npy")[:,:,:,::4])
+            st = self.from_polar_np(np.load(dataroot+f"/s{i}.npy")[:,:,:,::4])
             print("Loading data: ", i)
             # (16 128)
-            # dy = self.from_polar_np(np.load(opt.dataroot+f"/d{i}.npy")[:,:,::4,::4])
-            # st = self.from_polar_np(np.load(opt.dataroot+f"/s{i}.npy")[:,:,::4,::4])
+            # dy = self.from_polar_np(np.load(dataroot+f"/d{i}.npy")[:,:,::4,::4])
+            # st = self.from_polar_np(np.load(dataroot+f"/s{i}.npy")[:,:,::4,::4])
             # ma = np.load(self.dir_mask+f"/mask{i}.npy")[:,::4,::4]
 
 
@@ -293,12 +293,12 @@ class DytoStCARLADataset(torch.utils.data.Dataset):
 
 
 class TestDytoStCARLADataset(torch.utils.data.Dataset):
-    def __init__(self, opt):
+    def __init__(self):
         super(TestDytoStCARLADataset, self).__init__()
-        opt.dataroot = "/home/prashant/scratch/data/DSLR/lidar/"
+        dataroot = "/home/prashant/scratch/data/DSLR/lidar/"
 
         # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-        self.opt = opt
+
         
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,5:45] for i in range(2)])))
         # self.A = torch.from_numpy(self.from_polar_np(np.concatenate([np.load(self.dir_lidar+f"/s{i}.npy")[:,:,:,::4] for i in range(2)])))
@@ -331,8 +331,8 @@ class TestDytoStCARLADataset(torch.utils.data.Dataset):
             # ma = np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8]
             print("Loading data: ", i)
             # (16 128)
-            dy = self.from_polar_np(np.load(opt.dataroot+f"/d{i}.npy")[:,:,:,::4])
-            st = self.from_polar_np(np.load(opt.dataroot+f"/s{i}.npy")[:,:,:,::4])
+            dy = self.from_polar_np(np.load(dataroot+f"/d{i}.npy")[:,:,:,::4])
+            st = self.from_polar_np(np.load(dataroot+f"/s{i}.npy")[:,:,:,::4])
 
 
 
@@ -387,12 +387,12 @@ class TestDytoStCARLADataset(torch.utils.data.Dataset):
 
 
 class DytoStAtiDataset(torch.utils.data.Dataset):
-    def __init__(self, opt):
+    def __init__(self):
         super(DytoStAtiDataset, self).__init__()
-        opt.dataroot = "/home/prashant/scratch/data/DSLR/ARD/lidar"
+        dataroot = "/home/prashant/scratch/data/DSLR/ARD/lidar"
 
         # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-        self.opt = opt
+
 
         #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
 
@@ -407,12 +407,12 @@ class DytoStAtiDataset(torch.utils.data.Dataset):
 
         for i in npy:
             # (64 128)
-            dy = self.from_polar_np(np.load(opt.dataroot+f"/d{i}.npy")[:,:,:,::8])
-            st = self.from_polar_np(np.load(opt.dataroot+f"/s{i}.npy")[:,:,:,::8])
+            dy = self.from_polar_np(np.load(dataroot+f"/d{i}.npy")[:,:,:,::8])
+            st = self.from_polar_np(np.load(dataroot+f"/s{i}.npy")[:,:,:,::8])
             print("Loading data: ", i)
             # (16 128)
-            # dy = self.from_polar_np(np.load(opt.dataroot+f"/d{i}.npy")[:,:,::4,::4])
-            # st = self.from_polar_np(np.load(opt.dataroot+f"/s{i}.npy")[:,:,::4,::4])
+            # dy = self.from_polar_np(np.load(dataroot+f"/d{i}.npy")[:,:,::4,::4])
+            # st = self.from_polar_np(np.load(dataroot+f"/s{i}.npy")[:,:,::4,::4])
             # ma = np.load(self.dir_mask+f"/mask{i}.npy")[:,::4,::4]
 
 
@@ -467,12 +467,12 @@ class DytoStAtiDataset(torch.utils.data.Dataset):
 
 
 class TestDytoStAtiDataset(torch.utils.data.Dataset):
-    def __init__(self, opt):
+    def __init__(self):
         super(TestDytoStAtiDataset, self).__init__()
-        opt.dataroot = "/home/prashant/scratch/data/DSLR/ARD/lidar"
+        dataroot = "/home/prashant/scratch/data/DSLR/ARD/lidar"
 
         # self.ABC_paths = sorted([os.path.join(self.dir_ABC, name) for name in os.listdir(self.dir_ABC)])
-        self.opt = opt
+
         
         #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
 
@@ -491,8 +491,8 @@ class TestDytoStAtiDataset(torch.utils.data.Dataset):
             # ma = np.load(self.dir_mask+f"/0{i}dy-mask.npy")[:,:,::8]
             print("Loading data: ", i)
             # (16 128)
-            dy = self.from_polar_np(np.load(opt.dataroot+f"/d{i}.npy")[:,:,:,::8])
-            st = self.from_polar_np(np.load(opt.dataroot+f"/s{i}.npy")[:,:,:,::8])
+            dy = self.from_polar_np(np.load(dataroot+f"/d{i}.npy")[:,:,:,::8])
+            st = self.from_polar_np(np.load(dataroot+f"/s{i}.npy")[:,:,:,::8])
 
 
 
