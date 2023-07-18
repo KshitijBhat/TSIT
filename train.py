@@ -23,8 +23,6 @@ trainer = Pix2PixTrainer(opt)
 # create tool for counting iterations
 iter_counter = IterationCounter(opt, len(dataloader))
 
-# create tool for visualization
-visualizer = Visualizer(opt)
 
 for epoch in tqdm(iter_counter.training_epochs()):
     iter_counter.record_epoch_start(epoch)
@@ -42,9 +40,6 @@ for epoch in tqdm(iter_counter.training_epochs()):
         # Visualizations
         if iter_counter.needs_printing():
             losses = trainer.get_latest_losses()
-            visualizer.print_current_errors(epoch, iter_counter.epoch_iter,
-                                            losses, iter_counter.time_per_iter)
-            visualizer.plot_current_errors(losses, iter_counter.total_steps_so_far)
 
         if iter_counter.needs_displaying():
             if opt.task == 'SIS':
@@ -55,7 +50,6 @@ for epoch in tqdm(iter_counter.training_epochs()):
                 visuals = OrderedDict([('content', data_i['label'][0]),
                                        ('synthesized_image', trainer.get_latest_generated()[0]),
                                        ('style', data_i['image'][0])])
-            visualizer.display_current_results(visuals, epoch, iter_counter.total_steps_so_far)
 
         if iter_counter.needs_saving():
             print('saving the latest model (epoch %d, total_steps %d)' %
