@@ -36,7 +36,7 @@ def get_option_setter(dataset_name):
 def create_dataloader(opt):
     dataset = DytoStKITTIDataset
     instance = dataset()
-    instance.initialize(opt)
+    # instance.initialize(opt)
     print("dataset [%s] of size %d was created" %
           (type(instance).__name__, len(instance)))
     dataloader = torch.utils.data.DataLoader(
