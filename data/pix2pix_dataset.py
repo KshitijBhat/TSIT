@@ -76,24 +76,9 @@ class Pix2pixDataset(BaseDataset):
         transform_image = get_transform(self.opt, params)
         image_tensor = transform_image(image)
 
-        # if using instance maps
-        if self.opt.no_instance:
-            instance_tensor = 0
-        else:
-            instance_path = self.instance_paths[index]
-            instance = Image.open(instance_path)
-            if instance.mode == 'L':
-                instance_tensor = transform_label(instance) * 255
-                instance_tensor = instance_tensor.long()
-            else:
-                instance_tensor = transform_label(instance)
 
         input_dict = {'label': label_tensor,
-                      'instance': instance_tensor,
-                      'image': image_tensor,
-                      'path': image_path,
-                      'cpath': label_path
-                      }
+                      'image': image_tensor}
 
         # Give subclasses a chance to modify the final output
         self.postprocess(input_dict)
