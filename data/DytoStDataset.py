@@ -9,6 +9,9 @@ import cv2
 # from tqdm import tqdm
 npyf = 15
 
+osize = [256,256]
+Tran = transforms.Resize(osize, interpolation=transforms.InterpolationMode.BICUBIC)
+
 ########################
 # A is Dynamic/ Label/ Content
 # B is Static/ Ground Truth/Real "Image"/ Style 
@@ -34,14 +37,20 @@ class DytoStKITTIDataset(torch.utils.data.Dataset):
         # self.C = torch.from_numpy(np.concatenate([np.load(self.dir_mask+f"/s{i}.npy")[:,:1,:,::4] for i in range(2)]))
         
 
-        self.A = torch.from_numpy(np.random.random((5, 3, 256, 256))).float()
-        self.B = torch.from_numpy(np.random.random((5, 3, 256, 256))).float()
+        self.A = torch.from_numpy(np.random.random((5, 3, 64, 128))).float()
+        self.B = torch.from_numpy(np.random.random((5, 3, 64, 128))).float()
         # self.C = torch.from_numpy(np.random.random((4541, 1, 64, 128))).float()
 
         
         #original dataset: ABC is RGB | GT | mask => dynamic | static | mask
 
         ###################################################### SKIP data code
+
+        self.A = Tran(self.A)
+        self.B = Tran(self.B)
+
+        print("A SHAPE: ", self.A.shape)
+        
         """
         st1 = []
         dy1 = []
